@@ -73,6 +73,8 @@ app.put('/notes', (req, res) => {
     })
 });
 
+//this is a delete method
+
 app.delete('/notes/:id', (req, res) => {
     const { id } = req.params;
     db.deleteNote(id)
