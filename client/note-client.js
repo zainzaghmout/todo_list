@@ -27,7 +27,7 @@ async function deleteNote(noteId) {
 
 async function getNoteById(noteId) {
     const response = await fetch (`${baseUrl}/notes/${noteId}`);
-    return response;
+    return response.json();
 }
 
 async function getNotes(noteTitle) {
@@ -36,5 +36,5 @@ async function getNotes(noteTitle) {
         url += `/?title=${noteTitle}`;
     }
     const response = await fetch(url);
-    return response;
+    return response.json();
 }
