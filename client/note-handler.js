@@ -14,7 +14,7 @@ function updateNotesTable(noteTitle) {
             cell1.innerHTML = note["title"];
             cell2.innerHTML = note["content"];
             cell3.innerHTML = note["updatedDate"];
-            cell4.innerHTML = `<a href="#"><img src="images/edit.png" style="width: 22px;"></a>
+            cell4.innerHTML = `<a onclick="openEditModal('${note["_id"]}')"href="#"><img src="images/edit.png" style="width: 22px;"></a>
                                <a onclick="confirmDeleteNote('${note["_id"]}')" href="#"><img src="images/delete.png" style="width: 22px;"></a>`;
          })  
     })
