@@ -1,9 +1,15 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Note = require("./schemas/note");
+const User = require("./schemas/user");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 class Database {
     constructor() {
-        this.Url = "mongodb://localhost:27017/ToDO";
+        this.Url = process.env.MONGODB_URI;
     }
 
     connect() {
@@ -13,7 +19,7 @@ class Database {
             })
             .catch((err) => {
                 console.log("Error in connecting to database", err);
-            })
+            });
     }
 
     addNote(note) {
@@ -32,27 +38,28 @@ class Database {
         });
     }
 
-    getNotes() {
+    getNotesByUserId(userId) {
         return new Promise((resolve, reject) => {
-            Note.find({})
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject(err);
-                });
+            Note.find({ userId })
+                .then(data => resolve(data))
+                .catch(err => reject(err));
         });
     }
 
-    getNoteById(id) {
+    getNoteByIdAndUserId(id, userId) {
         return new Promise((resolve, reject) => {
-            Note.findById(id)
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject(err);
-                });
+            Note.findOne({ _id: id, userId })
+                .then(data => resolve(data))
+                .catch(err => reject(err));
+        });
+    }
+
+    getNotesByTitleAndUserId(title, userId) {
+        return new Promise((resolve, reject) => {
+            const query = { title: { $regex: new RegExp(title, 'i') }, userId };
+            Note.find(query)
+                .then(data => resolve(data))
+                .catch(err => reject(err));
         });
     }
 
@@ -82,18 +89,25 @@ class Database {
         });
     }
 
-    getNotesByTitle(noteTitle){
-        return new Promise((resolve, reject) => {
-            const query = {title : {$regex: new RegExp(noteTitle, 'i')} };
-            Note.find(query)
-            .then(data => {
-                resolve(data);
-            })
-            .catch(err => {
-                reject(err);
-            });
-        });
+    async signup(username, password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, password: hashedPassword });
+        return user.save();
+    }
+
+    async login(username, password) {
+        const user = await User.findOne({ username });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw new Error('Invalid password');
+        }
+        const token = jwt.sign({ userId: user._id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+        return { user, token };
     }
 }
+
 
 module.exports = Database;
