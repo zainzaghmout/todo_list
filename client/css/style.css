@@ -33,6 +33,13 @@ h1 {
   height: 60px;
 }
 
+.navigation-right {
+  position: absolute;
+  right: 20px;
+  top: 8%;
+  transform: translateY(-50%);
+}
+
 /* Search Input Field */
 
 .search-input {

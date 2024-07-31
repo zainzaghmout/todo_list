@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <title> Login / Signup</title>
+</head>
+<body>
+    <div class="hero">
+        <div class="form-box">
+            <h1 class="todo-title">ToDo List</h1>
+            <div class="button-box">
+                <div id="btn"></div>
+                <button type="button" class="toggle-btn" onclick="loginForm()">Login</button>
+                <button type="button" class="toggle-btn" onclick="signupForm()">Sign Up</button>
+
+            </div>
+            <form id="loginForm" class="input-group">
+                <input type="text" class="input-field" id="loginUsername" placeholder="Username" required>
+                <input type="password" class="input-field" id="loginPassword" placeholder="Enter Password" required>
+                <input type="checkbox" class="check-box"><span>Remember Password</span>
+                <button type="submit" class="submit-btn">Log in</button>
+            </form>
+
+            <p id="loginError" class="error"></p>
+
+            <form id="signupForm" class="input-group">
+                <input type="text" class="input-field" id="signupUsername" placeholder="Username" required>
+                <input type="password" class="input-field" id="signupPassword" placeholder="Enter Password" required>
+                <input type="checkbox" class="check-box"><span>I agree to the terms & conditions.</span>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+            <p id="signupError" class="error"></p>
+        </div>
+    </div>
+    <script>
+        var x = document.getElementById("loginForm");
+        var y = document.getElementById("signupForm");
+        var z = document.getElementById("btn");
+
+        function signupForm(){
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+        function loginForm(){
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0px";
+        }
+    </script>
+    <script src="auth-client.js"></script>
+</body>
+</html>
